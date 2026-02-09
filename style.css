@@ -5,3 +5,16 @@ Author: Fichot Julien
 Description: Thème personnalisé pour Nathalie Mota
 Version: 1.0
 */
+
+/* Gestion de la modale */ 
+
+.contact-modal {
+  display: none;
+}
+
+.contact-modal.is-open {
+  display: block;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.8);
+}

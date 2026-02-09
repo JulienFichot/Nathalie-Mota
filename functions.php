@@ -17,5 +17,13 @@ function mota_enqueue_assets() {
     [],
     '1.0'
   );
+
+  wp_enqueue_script(
+    'mota-scripts',
+    get_template_directory_uri() . '/assets/js/scripts.js',
+    [],
+    '1.0',
+    true
+  );
 }
 add_action('wp_enqueue_scripts', 'mota_enqueue_assets');
