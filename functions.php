@@ -11,13 +11,15 @@ function mota_theme_setup() {
 add_action('after_setup_theme', 'mota_theme_setup');
 
 function mota_enqueue_assets() {
+  // CSS depuis assets/css/
   wp_enqueue_style(
     'mota-style',
-    get_stylesheet_uri(),
+    get_template_directory_uri() . '/assets/css/style.css',
     [],
     '1.0'
   );
 
+  // JS depuis assets/js/
   wp_enqueue_script(
     'mota-scripts',
     get_template_directory_uri() . '/assets/js/scripts.js',

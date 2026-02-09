@@ -1,17 +1,30 @@
-  document.addEventListener('DOMContentLoaded', () => {
-  const openBtn = document.getElementById('open-contact');
-  const closeBtn = document.getElementById('close-contact');
+document.addEventListener('DOMContentLoaded', () => {
+
   const modal = document.getElementById('contact-modal');
+  const openBtn = document.querySelector('.contact-button');
+  const closeBtn = modal.querySelector('.contact-modal__close');
 
-  if (!modal) return;
-
-  openBtn?.addEventListener('click', () => {
+  function openModal() {
     modal.classList.add('is-open');
-    modal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    modal.classList.remove('is-open');
+    document.body.style.overflow = '';
+  }
+
+  openBtn.addEventListener('click', openModal);
+  closeBtn.addEventListener('click', closeModal);
+
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) closeModal();
   });
 
-  closeBtn?.addEventListener('click', () => {
-    modal.classList.remove('is-open');
-    modal.setAttribute('aria-hidden', 'true');
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal.classList.contains('is-open')) {
+      closeModal();
+    }
   });
+
 });
