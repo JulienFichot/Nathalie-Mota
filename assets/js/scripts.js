@@ -8,17 +8,26 @@ document.addEventListener('DOMContentLoaded', () => {
   let firstFocusableEl;
   let lastFocusableEl;
 
-  function openModal() {
-    modal.classList.add('is-open');
-    modal.setAttribute('aria-hidden', 'false');
-    document.body.style.overflow = 'hidden';
+  function openModal(e) {
+  // Si le bouton contient un attribut data-ref
+  const photoRef = e.currentTarget.getAttribute('data-ref');
+  const refField = modal.querySelector('#ref-photo');
 
-    // Focus trap
-    focusableEls = modal.querySelectorAll(focusableSelectors);
-    firstFocusableEl = focusableEls[0];
-    lastFocusableEl = focusableEls[focusableEls.length -1];
-    firstFocusableEl.focus();
+  if (photoRef && refField) {
+    refField.value = photoRef;
   }
+
+  modal.classList.add('is-open');
+  modal.setAttribute('aria-hidden', 'false');
+  document.body.style.overflow = 'hidden';
+
+  // Focus trap
+  focusableEls = modal.querySelectorAll(focusableSelectors);
+  firstFocusableEl = focusableEls[0];
+  lastFocusableEl = focusableEls[focusableEls.length -1];
+  firstFocusableEl.focus();
+}
+
 
   function closeModal() {
     modal.classList.remove('is-open');
