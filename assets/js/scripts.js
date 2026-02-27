@@ -79,43 +79,85 @@ document.addEventListener('DOMContentLoaded', () => {
   // Bind initial contact buttons
   bindContactButtons(document);
 
-  // ==================== LIGHTBOX ====================
-  const lightboxOverlay = document.getElementById('lightbox-overlay');
-  const lightboxImage = lightboxOverlay ? lightboxOverlay.querySelector('img') : null;
+  // ==================== LIGHTBOX (avec navigation) ====================
+const overlay = document.getElementById('lightbox-overlay');
+const lbImg = document.getElementById('lightbox-img');
+const lbTitle = document.getElementById('lightbox-title');
+const lbRef = document.getElementById('lightbox-ref');
 
-  function openLightboxFromImg(img) {
-    if (!lightboxOverlay || !lightboxImage) return;
-    lightboxImage.src = img.src;
-    lightboxOverlay.style.display = 'flex';
-  }
+const btnClose = overlay ? overlay.querySelector('.lightbox-close') : null;
+const btnPrev = overlay ? overlay.querySelector('.lightbox-prev') : null;
+const btnNext = overlay ? overlay.querySelector('.lightbox-next') : null;
 
-  function bindLightbox(scope) {
-    scope.querySelectorAll('.lightbox-trigger').forEach(img => {
-      if (img.dataset.boundLb) return;
-      img.dataset.boundLb = '1';
-      img.addEventListener('click', () => openLightboxFromImg(img));
-    });
+let lightboxItems = [];
+let currentIndex = 0;
 
-    // bouton plein écran (si présent dans ton HTML)
-    scope.querySelectorAll('.fullscreen-button, .lightbox-open').forEach(btn => {
-      if (btn.dataset.boundFs) return;
-      btn.dataset.boundFs = '1';
-      btn.addEventListener('click', () => {
-        const card = btn.closest('.photo-block');
-        const img = card ? card.querySelector('.lightbox-trigger') : null;
-        if (img) openLightboxFromImg(img);
-      });
-    });
-  }
+function rebuildLightboxItems() {
+  lightboxItems = Array.from(document.querySelectorAll('.lightbox-open')).map(btn => ({
+    src: btn.getAttribute('data-src') || '',
+    title: btn.getAttribute('data-title') || '',
+    ref: btn.getAttribute('data-ref') || ''
+  })).filter(x => x.src);
+}
 
-  bindLightbox(document);
+function renderLightbox(index) {
+  if (!overlay || !lbImg) return;
+  if (!lightboxItems.length) return;
 
-  if (lightboxOverlay) {
-    lightboxOverlay.addEventListener('click', () => {
-      lightboxOverlay.style.display = 'none';
-      if (lightboxImage) lightboxImage.src = '';
-    });
-  }
+  currentIndex = (index + lightboxItems.length) % lightboxItems.length;
+
+  const item = lightboxItems[currentIndex];
+  lbImg.src = item.src;
+  lbImg.alt = item.title || '';
+  if (lbTitle) lbTitle.textContent = item.title || '';
+  if (lbRef) lbRef.textContent = item.ref ? `REF. ${item.ref}` : '';
+}
+
+function openLightboxAt(index) {
+  if (!overlay) return;
+  rebuildLightboxItems();
+  renderLightbox(index);
+  overlay.classList.add('is-open');
+  overlay.setAttribute('aria-hidden', 'false');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeLightbox() {
+  if (!overlay) return;
+  overlay.classList.remove('is-open');
+  overlay.setAttribute('aria-hidden', 'true');
+  document.body.style.overflow = '';
+  if (lbImg) lbImg.src = '';
+}
+
+document.addEventListener('click', (e) => {
+  const btn = e.target.closest('.lightbox-open');
+  if (!btn) return;
+
+  e.preventDefault();
+
+  rebuildLightboxItems();
+  const index = lightboxItems.findIndex(item => item.src === (btn.getAttribute('data-src') || ''));
+  openLightboxAt(index >= 0 ? index : 0);
+});
+
+if (btnClose) btnClose.addEventListener('click', closeLightbox);
+if (overlay) {
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) closeLightbox();
+  });
+}
+if (btnPrev) btnPrev.addEventListener('click', () => renderLightbox(currentIndex - 1));
+if (btnNext) btnNext.addEventListener('click', () => renderLightbox(currentIndex + 1));
+
+document.addEventListener('keydown', (e) => {
+  if (!overlay || !overlay.classList.contains('is-open')) return;
+
+  if (e.key === 'Escape') closeLightbox();
+  if (e.key === 'ArrowLeft') renderLightbox(currentIndex - 1);
+  if (e.key === 'ArrowRight') renderLightbox(currentIndex + 1);
+});
+  
 
   // ==================== PAGINATION AJAX (8 par clic via mota_load_photos) ====================
   let paged = 1;

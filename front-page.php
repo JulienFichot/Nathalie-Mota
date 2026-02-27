@@ -74,8 +74,22 @@ get_header();
   </div>
 </section>
 
-<div class="lightbox-overlay" id="lightbox-overlay">
-  <img src="" alt="">
+<div class="lightbox-overlay" id="lightbox-overlay" aria-hidden="true" role="dialog" aria-modal="true">
+  <div class="lightbox">
+    <button class="lightbox-close" type="button" aria-label="Fermer">✕</button>
+
+    <button class="lightbox-prev" type="button" aria-label="Précédente">←</button>
+    <button class="lightbox-next" type="button" aria-label="Suivante">→</button>
+
+    <div class="lightbox-media">
+      <img id="lightbox-img" src="" alt="">
+    </div>
+
+    <div class="lightbox-info">
+      <span id="lightbox-title"></span>
+      <span id="lightbox-ref"></span>
+    </div>
+  </div>
 </div>
 
 <?php
