@@ -1,2 +1,0 @@
-# Nathalie-Mota
-Projet OC
