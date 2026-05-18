@@ -1,0 +1,21 @@
+# ── Fichiers générés par IA / outils de développement ───────────────────────
+CLAUDE.md
+RAPPORT.md
+README.md
+GUIDE-OC.md
+PROMPT-POWERPOINT.md
+.claude/
+
+# ── Éditeurs ─────────────────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ── OS ───────────────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+
+# ── Dépendances ──────────────────────────────────────────────────────────────
+node_modules/
+vendor/
